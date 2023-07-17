@@ -1,3 +1,5 @@
+using Conduit.Features.User.Application;
+using Conduit.Features.User.Application.Interface;
 using Conduit.Features.User.Domain;
 using Conduit.Infrastructure;
 using MediatR;
@@ -20,7 +22,9 @@ var authenticationSettings = new AuthenticationSettings();
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
 builder.Services.AddSingleton(authenticationSettings);
-
+builder.Services.AddScoped<Authentication>();
+builder.Services.AddScoped<Registration>();
+builder.Services.AddScoped<IHashingService, HashingService>();
 //Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -46,12 +50,12 @@ builder.Services.AddDbContext<ConduitContext>(options =>
 
 });
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-             .AddEntityFrameworkStores<ConduitContext>();
+//builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+//             .AddEntityFrameworkStores<ConduitContext>();
 
-builder.Services.AddIdentityServer()
-    .AddApiAuthorization<User, ConduitContext>()
-    .AddDeveloperSigningCredential();
+//builder.Services.AddIdentityServer()
+//    .AddApiAuthorization<User, ConduitContext>()
+//    .AddDeveloperSigningCredential();
 
 builder.Services.AddAuthentication(option =>
 {
@@ -132,5 +136,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("Front");
+
+//app.UseMiddleware<ErrorHandler>;
 
 app.Run();

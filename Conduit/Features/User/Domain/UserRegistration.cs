@@ -6,4 +6,8 @@
         public string email { get; init; }
         public string password { get; init; }
     }
+    public class RootUserRegistration
+    {
+        public UserRegistration user { get; init; }
+    }
 }

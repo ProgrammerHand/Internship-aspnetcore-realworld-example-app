@@ -49,6 +49,7 @@ namespace Conduit.Features.User.Application
                 {
                     Email = data.email,
                     Username = data.username,
+                    Role = "User",
                     PasswordHash = hash.Item1,
                     PasswordSalt = hash.Item2,
                 });

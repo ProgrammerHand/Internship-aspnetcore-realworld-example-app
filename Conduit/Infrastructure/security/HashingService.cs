@@ -2,7 +2,7 @@
 using System.Text;
 using Conduit.Features.User.Application.Interface;
 
-namespace Conduit.Features.User.Application
+namespace Conduit.Infrastructure.security
 {
     public class HashingService : IHashingService
     {

@@ -1,7 +1,7 @@
 ﻿using Conduit.Features.User.Application;
 using Conduit.Features.User.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace Conduit.Features.User.UI
 {
@@ -11,24 +11,34 @@ namespace Conduit.Features.User.UI
     {
         private readonly Registration _Registration;
         private readonly Authentication _Authenticationn;
+        private readonly GetAll _GetAllUsers;
 
-        public Controller(Registration regServ, Authentication aunthServ)
+
+
+        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllUsers )
         {
             _Registration = regServ;
             _Authenticationn = aunthServ;
+            _GetAllUsers = getAllUsers;
 
         }
-        [HttpPost("")]
-        public async Task<IActionResult> RegisterUser(UserRegistration data)
+        [HttpPost(""), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RegisterUser(RootUserRegistration data)
         {
-            return Ok(await _Registration.Register(data));
+            return Ok(await _Registration.Register(data.user));
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody] object User)
+        [HttpPost("login"), AllowAnonymous]
+        public async Task<IActionResult> LoginUser(RootUserAunthenication data)
         {
-            //var temp = JsonSerializer.Deserialize<UserAunthenicationRoot>(data);
-            return Ok(_Authenticationn.Authenticate(User));
+            return Ok(await _Authenticationn.Authenticate(data.user));
         }
+
+        [HttpGet("getAll"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> getAll()
+        {
+            return Ok(await _GetAllUsers.GetAllUsers());
+        }
+
     }
 }

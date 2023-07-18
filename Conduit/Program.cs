@@ -2,11 +2,14 @@ using Conduit.Features.User.Application;
 using Conduit.Features.User.Application.Interface;
 using Conduit.Features.User.Domain;
 using Conduit.Infrastructure;
+using Conduit.Infrastructure.security;
+using Conduit.Middleware;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
@@ -23,8 +26,10 @@ builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddScoped<Authentication>();
-builder.Services.AddScoped<Registration>();
+builder.Services.AddScoped<Registration>(); 
+    builder.Services.AddScoped<GetAll>();
 builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IJWTtoken, JWTtoken>();
 //Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -68,8 +73,12 @@ builder.Services.AddAuthentication(option =>
     cfg.SaveToken = true;
     cfg.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = authenticationSettings.JwtIssuer,
-        ValidAudience = authenticationSettings.JwtIssuer,
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        //ValidIssuer = authenticationSettings.JwtIssuer,
+        //ValidAudience = authenticationSettings.JwtIssuer,
+        //new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
     };
 })
@@ -133,6 +142,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseErrorHandlingMiddleware();
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -140,5 +151,4 @@ app.MapControllers();
 app.UseCors("Front");
 
 //app.UseMiddleware<ErrorHandler>;
-
 app.Run();

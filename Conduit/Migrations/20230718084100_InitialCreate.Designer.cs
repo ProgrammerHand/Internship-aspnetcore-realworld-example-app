@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conduit.Migrations
 {
     [DbContext(typeof(ConduitContext))]
-    [Migration("20230717094726_InitialCreate")]
+    [Migration("20230718084100_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -51,6 +51,10 @@ namespace Conduit.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()

@@ -45,14 +45,7 @@ namespace Conduit.Features.User.Application
             if (!await IsExisUser(data.email, data.username))
             {
                 var hash = _hashingService.HashPassword(data.password);
-                return await CreateUser(new Domain.User
-                {
-                    Email = data.email,
-                    Username = data.username,
-                    Role = "User",
-                    PasswordHash = hash.Item1,
-                    PasswordSalt = hash.Item2,
-                });
+                return await CreateUser(await Domain.User.CreateUser(data.email, data.username, hash.Item1, hash.Item2));
             }
             else
                 throw new ArgumentException("User with such username or email alredy exists");

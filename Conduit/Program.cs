@@ -1,22 +1,15 @@
 using Conduit.Features.User.Application;
 using Conduit.Features.User.Application.Interface;
-using Conduit.Features.User.Domain;
 using Conduit.Infrastructure;
 using Conduit.Infrastructure.security;
 using Conduit.Middleware;
-using MediatR;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +20,11 @@ builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Registration>(); 
-    builder.Services.AddScoped<GetAll>();
+builder.Services.AddScoped<GetAll>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IJWTtoken, JWTtoken>();
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 //Add services to the container.
 builder.Services.AddCors(options =>
 {

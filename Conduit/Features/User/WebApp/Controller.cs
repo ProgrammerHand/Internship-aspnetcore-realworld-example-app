@@ -22,7 +22,7 @@ namespace Conduit.Features.User.UI
             _GetAllUsers = getAllUsers;
 
         }
-        [HttpPost(""), Authorize(Roles = "Admin")]
+        [HttpPost(""), AllowAnonymous]
         public async Task<IActionResult> RegisterUser(RootUserRegistration data)
         {
             return Ok(await _Registration.Register(data.user));

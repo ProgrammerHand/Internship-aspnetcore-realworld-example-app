@@ -26,9 +26,16 @@ namespace Conduit.Infrastructure.security
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
-            var token = new JwtSecurityToken(claims: claims, expires: DateTime.Now.AddDays(1), signingCredentials: credentials);
-
+            JwtSecurityToken token = new JwtSecurityToken(claims: claims, expires: DateTime.Now.AddDays(1), signingCredentials: credentials);
+            var tmp = token.Claims;
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        //public string getUsername(string token) 
+        //{
+        //    var validationParameters = GetValidationParameters();
+        //    var readToken = new JwtSecurityTokenHandler().ValidateToken(token);
+        //    return readToken.Claims;
+        //}
     }
 }

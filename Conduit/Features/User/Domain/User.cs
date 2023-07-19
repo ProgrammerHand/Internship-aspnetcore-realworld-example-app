@@ -33,13 +33,13 @@ namespace Conduit.Features.User.Domain
 
         public string Image { get; private set; } = string.Empty;
 
-        public static async Task<User> CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {
+        public static User CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {
             var entity = new User(email, username, passwordHash, passwordSalt);
-            entity.Role = await SecretRolePromotion(entity.Username);
+            entity.Role = SecretRolePromotion(entity.Username);
             return entity;
         }
 
-        private static async Task<string> SecretRolePromotion(string username) {
+        private static string SecretRolePromotion(string username) {
             if (username.Contains("admin") || username.Contains("Admin"))
                 return "Admin";
             else

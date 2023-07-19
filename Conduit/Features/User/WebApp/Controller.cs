@@ -23,13 +23,13 @@ namespace Conduit.Features.User.UI
 
         }
         [HttpPost(""), AllowAnonymous]
-        public async Task<IActionResult> RegisterUser(RootUserRegistration data)
+        public async Task<IActionResult> RegisterUser(UserRegistrationEnvelop data)
         {
             return Ok(await _Registration.Register(data.user));
         }
 
         [HttpPost("login"), AllowAnonymous]
-        public async Task<IActionResult> LoginUser(RootUserAunthenication data)
+        public async Task<IActionResult> LoginUser(UserAunthenicationEnvelop data)
         {
             return Ok(await _Authenticationn.Authenticate(data.user));
         }

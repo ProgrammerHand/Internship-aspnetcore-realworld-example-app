@@ -39,7 +39,7 @@ namespace Conduit.Features.User.Application
             return await _context.Users.AsNoTracking().Select(x => new AunthenticatedUser { email = x.Email, token = null, role =x.Role, username = x.Username, bio = x.Bio, image = x.Image }).FirstOrDefaultAsync(x => x.email == email);
         }
 
-        public async Task<UserEnvelop> Authenticate(UserAunthenication data)
+        public async Task<AunthenticateUserEnvelop> Authenticate(UserAunthenication data)
         {
             var credentials = await GetPasswordHash(data.Email);
 
@@ -47,7 +47,7 @@ namespace Conduit.Features.User.Application
             { 
                 var temp = await GetAunthUser(data.Email);
                 temp.token = _jvtService.CreateToken(temp.username, temp.role);
-                return new UserEnvelop(temp);
+                return new AunthenticateUserEnvelop(temp);
                 }
             else
                 throw new ArgumentException("Wrong password or email");

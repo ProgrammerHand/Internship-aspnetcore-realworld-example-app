@@ -11,5 +11,5 @@
 
     }
 
-    public record UserEnvelop(AunthenticatedUser user);
+    public record AunthenticateUserEnvelop(AunthenticatedUser user);
 }

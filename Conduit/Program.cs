@@ -139,6 +139,8 @@ app.UseHttpsRedirection();
 
 app.UseErrorHandlingMiddleware();
 
+app.UseHttpCodeHandlingMiddleware();
+
 app.UseAuthorization();
 
 app.MapControllers();

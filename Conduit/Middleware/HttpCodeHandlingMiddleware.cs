@@ -23,7 +23,6 @@ namespace Conduit.Middleware
 
         public async Task HandleHttpExceptionAsync(HttpContext context)
         {
-                _logger.LogInformation($"code:{context.Response.StatusCode}// time:{DateTime.UtcNow}");
                 var error = context.Response.StatusCode switch
                 {
                     (int)HttpStatusCode.Unauthorized => new Error("No access", "You arent logged in"),
@@ -37,9 +36,9 @@ namespace Conduit.Middleware
 
     }
 
-    public static class ErrorHandlingMiddlewareExtension
+    public static class HttpCodeHandlingMiddlewareExtension
     {
-        public static IApplicationBuilder UseErrorHandlingMiddleware(this IApplicationBuilder app) 
+        public static IApplicationBuilder UseHttpCodeHandlingMiddleware(this IApplicationBuilder app) 
         {
             return app.UseMiddleware<HttpCodeHandlingMiddleware>();
         }

@@ -7,8 +7,5 @@ namespace Conduit.Features.User.Domain
             public string Password { get; init; }
     }
 
-    public class RootUserAunthenication 
-    {
-        public UserAunthenication user { get; init; }
-    }
+    public record UserAunthenicationEnvelop(UserAunthenication user);
 }

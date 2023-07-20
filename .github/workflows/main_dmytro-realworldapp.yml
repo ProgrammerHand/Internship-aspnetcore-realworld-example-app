@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'Dmytro-RealWorldApp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C9459C29E3474FEA92C3979FD2B1F251 }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: .

@@ -122,8 +122,8 @@ builder.Services.AddSwaggerGen(x =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger(c =>
     {
         c.RouteTemplate = "swagger/{documentName}/swagger.json";
@@ -134,7 +134,7 @@ if (app.Environment.IsDevelopment())
     {
         x.SwaggerEndpoint("/swagger/v1/swagger.json", "RealWorld API V1");
     });
-}
+//}
 
 app.UseHttpsRedirection();
 

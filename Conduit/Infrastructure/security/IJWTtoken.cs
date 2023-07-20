@@ -2,6 +2,6 @@
 {
     public interface IJWTtoken
     {
-        string CreateToken(string username, string role);
+        string CreateToken(string username, string role, string id);
     }
 }

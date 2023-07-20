@@ -2,6 +2,7 @@
 {
     public class AunthenticatedUser
     {
+        public int id { get; init; }
         public string email { get; init; }
         public string token { get; set; } = null;
         public string role { get; init; }

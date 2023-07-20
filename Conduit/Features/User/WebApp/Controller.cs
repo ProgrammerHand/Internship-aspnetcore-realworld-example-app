@@ -35,16 +35,22 @@ namespace Conduit.Features.User.UI
         }
 
         [HttpGet("getAll"), Authorize(Roles = "Admin")]
-        public async Task<IActionResult> getAll()
+        public async Task<IActionResult> GetAll()
         {
             return Ok(await _GetAll.GetAllUsers());
         }
 
         [HttpPut(""), Authorize(Roles = "User")]
-        public async Task<IActionResult> updateUser(UserUpdateDataEnvelop data)
+        public async Task<IActionResult> UpdateUser(UserUpdateDataEnvelop data)
         {
             return Ok(await _Update.UpdateUser(data.updateData));
         }
 
+        [HttpGet(""), Authorize(Roles = "User")]
+        public async Task<IActionResult> GetCurrent()
+        {
+            this.HttpContext.User.Claims.Single(x=> x.Type.Equals("sub"));
+            return Ok();
+        }
     }
 }

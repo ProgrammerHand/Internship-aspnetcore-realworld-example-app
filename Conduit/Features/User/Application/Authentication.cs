@@ -1,4 +1,5 @@
-﻿using Conduit.Features.User.Application.Interface;
+﻿using AutoMapper.QueryableExtensions;
+using Conduit.Features.User.Application.Interface;
 using Conduit.Features.User.Domain;
 using Conduit.Infrastructure;
 using Conduit.Infrastructure.security;
@@ -34,7 +35,7 @@ namespace Conduit.Features.User.Application
 
         private async Task<AunthenticatedUser> GetAunthUser(string email)
         {
-            return await _context.Users.AsNoTracking().Select(x => new AunthenticatedUser { email = x.Email, token = null, role =x.Role, username = x.Username, bio = x.Bio, image = x.Image }).FirstOrDefaultAsync(x => x.email == email);
+            return await _context.Users.AsNoTracking().Select(x => new AunthenticatedUser { id = x.Id, email = x.Email, token = null, role =x.Role, username = x.Username, bio = x.Bio, image = x.Image }).FirstOrDefaultAsync(x => x.email == email);
         }
 
         public async Task<AunthenticateUserEnvelop> Authenticate(UserAuthenticationData data)
@@ -42,7 +43,7 @@ namespace Conduit.Features.User.Application
             if (_hashingService.VerifyPassword(data.Password, await GetPasswordHash(data.Email)))
             {
                 var aunthUser = await GetAunthUser(data.Email);
-                aunthUser.token = _jvtService.CreateToken(aunthUser.username, aunthUser.role);
+                aunthUser.token = _jvtService.CreateToken(aunthUser.username, aunthUser.role, aunthUser.id.ToString());
                 return new AunthenticateUserEnvelop(aunthUser);
                 }
             else

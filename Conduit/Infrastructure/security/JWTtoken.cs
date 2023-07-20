@@ -14,12 +14,13 @@ namespace Conduit.Infrastructure.security
             _configuration = configuration;
         }
 
-        public string CreateToken(string username, string role)
+        public string CreateToken(string username, string role, string id)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username), 
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role),
+                new Claim(ClaimTypes.NameIdentifier, id)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:JwtKey").Value!));

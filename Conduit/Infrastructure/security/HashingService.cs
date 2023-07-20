@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using Conduit.Features.User.Application.Interface;
+using static Conduit.Features.User.Application.Authentication;
 
 namespace Conduit.Infrastructure.security
 {
@@ -18,10 +19,10 @@ namespace Conduit.Infrastructure.security
             return (hash, salt);
         }
 
-        public bool VerifyPassword(byte[] passwordHash, string inputPassword, byte[] salt)
+        public bool VerifyPassword(string inputPassword, UserAunthCredentials dbPassword)
         {
-            var inputHash = Rfc2898DeriveBytes.Pbkdf2(inputPassword, salt, iteration, _hashAlgorithm, keySize);
-            return CryptographicOperations.FixedTimeEquals(passwordHash, inputHash);
+            var inputHash = Rfc2898DeriveBytes.Pbkdf2(inputPassword, dbPassword.passwordSalt, iteration, _hashAlgorithm, keySize);
+            return CryptographicOperations.FixedTimeEquals(dbPassword.passwordHash, inputHash);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Conduit.Features.User.Application
             return await saved > 0 ? true : false;
         }
 
-        public async Task<bool> Register(UserRegistration data)
+        public async Task<bool> Register(UserRegistrationData data)
         {
 
             if (!await IsExisUser(data.email, data.username))

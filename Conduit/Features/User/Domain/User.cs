@@ -39,6 +39,15 @@ namespace Conduit.Features.User.Domain
             return entity;
         }
 
+        public void UpdateUser(UserUpdateData data, byte[] passwordHash)
+        {
+            Email = data.email;
+            Username = data.username;
+            PasswordHash = passwordHash;
+            Bio = data.bio;
+            Image = data.image;
+        }
+
         private static string SecretRolePromotion(string username) {
             if (username.Contains("admin") || username.Contains("Admin"))
                 return "Admin";

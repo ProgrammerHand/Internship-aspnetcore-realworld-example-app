@@ -11,33 +11,39 @@ namespace Conduit.Features.User.UI
     {
         private readonly Registration _Registration;
         private readonly Authentication _Authenticationn;
-        private readonly GetAll _GetAllUsers;
+        private readonly GetAll _GetAll;
+        private readonly Update _Update;
 
-
-
-        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllUsers )
+        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllServ, Update updateServ )
         {
             _Registration = regServ;
             _Authenticationn = aunthServ;
-            _GetAllUsers = getAllUsers;
+            _GetAll = getAllServ;
+            _Update = updateServ;
 
         }
         [HttpPost(""), AllowAnonymous]
-        public async Task<IActionResult> RegisterUser(UserRegistrationEnvelop data)
+        public async Task<IActionResult> RegisterUser(UserRegistrationDataEnvelop data)
         {
-            return Ok(await _Registration.Register(data.user));
+            return Ok(await _Registration.Register(data.registrationData));
         }
 
         [HttpPost("login"), AllowAnonymous]
-        public async Task<IActionResult> LoginUser(UserAunthenicationEnvelop data)
+        public async Task<IActionResult> AuthenticateUser(UserAuthenticationDataEnvelop data)
         {
-            return Ok(await _Authenticationn.Authenticate(data.user));
+            return Ok(await _Authenticationn.Authenticate(data.authenticationData));
         }
 
         [HttpGet("getAll"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> getAll()
         {
-            return Ok(await _GetAllUsers.GetAllUsers());
+            return Ok(await _GetAll.GetAllUsers());
+        }
+
+        [HttpPut(""), Authorize(Roles = "User")]
+        public async Task<IActionResult> updateUser(UserUpdateDataEnvelop data)
+        {
+            return Ok(await _Update.UpdateUser(data.updateData));
         }
 
     }

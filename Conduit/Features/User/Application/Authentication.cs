@@ -26,12 +26,10 @@ namespace Conduit.Features.User.Application
             _jvtService = jwtService;
         }
 
-        private async Task<Domain.User> GetPasswordHash(string email)
+        private async Task<UserAunthCredentials> GetPasswordHash(string email)
         {
-            //var temp = 
-            //var temp1 = await temp;
-            //return await _context.Users.Select(x => new UserAunthCredentials { email = x.Email, passwordHash = x.PasswordHash, passwordSalt = x.PasswordSalt }).FirstOrDefaultAsync(x => x.email == email);
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Users.Select(x => new UserAunthCredentials { email = x.Email, passwordHash = x.PasswordHash, passwordSalt = x.PasswordSalt }).FirstOrDefaultAsync(x => x.email == email);
+            //return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
 
         private async Task<AunthenticatedUser> GetAunthUser(string email)
@@ -39,15 +37,13 @@ namespace Conduit.Features.User.Application
             return await _context.Users.AsNoTracking().Select(x => new AunthenticatedUser { email = x.Email, token = null, role =x.Role, username = x.Username, bio = x.Bio, image = x.Image }).FirstOrDefaultAsync(x => x.email == email);
         }
 
-        public async Task<AunthenticateUserEnvelop> Authenticate(UserAunthenication data)
+        public async Task<AunthenticateUserEnvelop> Authenticate(UserAuthenticationData data)
         {
-            var credentials = await GetPasswordHash(data.Email);
-
-            if (_hashingService.VerifyPassword(credentials.PasswordHash, data.Password, credentials.PasswordSalt))
-            { 
-                var temp = await GetAunthUser(data.Email);
-                temp.token = _jvtService.CreateToken(temp.username, temp.role);
-                return new AunthenticateUserEnvelop(temp);
+            if (_hashingService.VerifyPassword(data.Password, await GetPasswordHash(data.Email)))
+            {
+                var aunthUser = await GetAunthUser(data.Email);
+                aunthUser.token = _jvtService.CreateToken(aunthUser.username, aunthUser.role);
+                return new AunthenticateUserEnvelop(aunthUser);
                 }
             else
                 throw new ArgumentException("Wrong password or email");

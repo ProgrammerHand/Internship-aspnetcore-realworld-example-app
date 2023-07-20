@@ -21,6 +21,7 @@ builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Registration>(); 
 builder.Services.AddScoped<GetAll>();
+builder.Services.AddScoped<Update>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IJWTtoken, JWTtoken>();
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));

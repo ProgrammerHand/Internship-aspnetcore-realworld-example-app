@@ -1,6 +1,4 @@
-﻿using Conduit.Features.User.Application.Dto;
-using Conduit.Infrastructure.Security.Interface;
-using Conduit.Infrastructure;
+﻿using Conduit.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Conduit.Features.Article.Application.Dto;
 

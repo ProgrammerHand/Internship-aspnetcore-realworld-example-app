@@ -1,6 +1,4 @@
 ﻿using Conduit.Features.User.Application.Dto;
-using Microsoft.AspNetCore.Identity;
-using System.Collections;
 
 namespace Conduit.Entities
 {
@@ -31,7 +29,7 @@ namespace Conduit.Entities
         public string Bio { get; private set; } = string.Empty; 
 
         public string Image { get; private set; } = string.Empty;
-
+        public int ArticleId { get; set; }
         public ICollection<Article> Articles { get; private set; }
 
         public static User CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {

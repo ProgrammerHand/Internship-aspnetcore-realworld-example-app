@@ -15,7 +15,7 @@ namespace Conduit.Infrastructure.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
                 await _next(context);
-                HandleHttpExceptionAsync(context);  
+                await HandleHttpExceptionAsync(context);  
         }
 
         public async Task HandleHttpExceptionAsync(HttpContext context)

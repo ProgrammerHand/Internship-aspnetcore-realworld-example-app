@@ -2,13 +2,13 @@
 {
     public class Article
     {
-        public int id { get; set; }
-        public string slug { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
+        public int Id { get; set; }
+        public string Slug { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public string Body { get; set; }
-        public List<string> tagList { get; set; }
-        public int authorId { get; set; }
+        public ICollection<string> TagList { get; set; }
+        public int AuthorId { get; set; }
         public User Author { get; set; }
     }
 }

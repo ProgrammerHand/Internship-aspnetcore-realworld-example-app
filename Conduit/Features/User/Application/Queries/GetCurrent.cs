@@ -1,6 +1,5 @@
 ﻿using Conduit.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Conduit.Entities;
 
 
 namespace Conduit.Features.User.Application.Queries

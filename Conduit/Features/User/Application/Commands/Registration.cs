@@ -2,7 +2,6 @@
 using Conduit.Infrastructure.Security.Interface;
 using Microsoft.EntityFrameworkCore;
 using Conduit.Infrastructure;
-using Conduit.Entities;
 
 namespace Conduit.Features.User.Application.Commands
 {

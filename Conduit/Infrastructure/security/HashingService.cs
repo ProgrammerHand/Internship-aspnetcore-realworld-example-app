@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Conduit.Features.User.Application.Interface;
-using static Conduit.Features.User.Application.Authentication;
+﻿using Conduit.Infrastructure.Security.Interface;
+using System.Security.Cryptography;
 
-namespace Conduit.Infrastructure.security
+namespace Conduit.Infrastructure.Security
 {
     public class HashingService : IHashingService
     {

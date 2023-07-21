@@ -1,5 +1,5 @@
 ﻿
-namespace Conduit.Features.User.Domain
+namespace Conduit.Features.User.Application.Dto
 {
     public class UserAuthenticationData
     {

@@ -1,9 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Conduit.Infrastructure.Security.Interface;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Conduit.Infrastructure.security
+namespace Conduit.Infrastructure.Security
 {
     public class JWTtoken : IJWTtoken
     {

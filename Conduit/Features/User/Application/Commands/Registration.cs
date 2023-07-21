@@ -1,9 +1,10 @@
-﻿using Conduit.Features.User.Application.Interface;
-using Conduit.Features.User.Domain;
-using Conduit.Infrastructure;
+﻿using Conduit.Features.User.Application.Dto;
+using Conduit.Infrastructure.Security.Interface;
 using Microsoft.EntityFrameworkCore;
+using Conduit.Infrastructure;
+using Conduit.Entities;
 
-namespace Conduit.Features.User.Application
+namespace Conduit.Features.User.Application.Commands
 {
     public class Registration
     {
@@ -28,7 +29,7 @@ namespace Conduit.Features.User.Application
             return await _context.Users.AnyAsync(x => x.Email == email && x.Username == username);
         }
 
-        private async Task<bool> CreateUser(Domain.User newUser)
+        private async Task<bool> CreateUser(Entities.User newUser)
         {
             await _context.Users.AddAsync(newUser);
             return await Save();
@@ -45,7 +46,7 @@ namespace Conduit.Features.User.Application
             if (!await IsExisUser(data.email, data.username))
             {
                 var hash = _hashingService.HashPassword(data.password);
-                return await CreateUser(Domain.User.CreateUser(data.email, data.username, hash.Item1, hash.Item2));
+                return await CreateUser(Entities.User.CreateUser(data.email, data.username, hash.Item1, hash.Item2));
             }
             else
                 throw new ArgumentException("User with such username or email alredy exists");

@@ -1,11 +1,9 @@
-﻿using AutoMapper.QueryableExtensions;
-using Conduit.Features.User.Application.Interface;
-using Conduit.Features.User.Domain;
+﻿using Conduit.Features.User.Application.Dto;
 using Conduit.Infrastructure;
-using Conduit.Infrastructure.security;
+using Conduit.Infrastructure.Security.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace Conduit.Features.User.Application
+namespace Conduit.Features.User.Application.Commands
 {
     public class Authentication
     {
@@ -13,12 +11,7 @@ namespace Conduit.Features.User.Application
         private readonly IHashingService _hashingService;
         private readonly IJWTtoken _jvtService;
 
-        public record UserAunthCredentials
-        {
-            public string email { get; init; }
-            public byte[] passwordHash { get; init; }
-            public byte[] passwordSalt { get; init; }
-        }
+
 
         public Authentication(ConduitContext context, IHashingService hashingService, IJWTtoken jwtService)
         {

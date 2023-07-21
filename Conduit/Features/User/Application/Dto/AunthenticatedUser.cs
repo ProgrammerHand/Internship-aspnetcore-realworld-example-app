@@ -1,4 +1,4 @@
-﻿namespace Conduit.Features.User.Domain
+﻿namespace Conduit.Features.User.Application.Dto
 {
     public class AunthenticatedUser
     {
@@ -11,5 +11,5 @@
         public string image { get; init; } = null;
     }
 
-    public record AunthenticateUserEnvelop(AunthenticatedUser user);
+    public record AunthenticateUserEnvelop(AunthenticatedUser aunthenticatedUser);
 }

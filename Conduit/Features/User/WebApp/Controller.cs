@@ -1,9 +1,11 @@
-﻿using Conduit.Features.User.Application;
-using Conduit.Features.User.Domain;
+﻿using Conduit.Features.User.Application.Commands;
+using Conduit.Features.User.Application.Dto;
+using Conduit.Features.User.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
-namespace Conduit.Features.User.UI
+namespace Conduit.Features.User.WebApp
 {
     [ApiController]
     [Route("users")]
@@ -40,13 +42,13 @@ namespace Conduit.Features.User.UI
             return Ok(await _GetAll.GetAllUsers());
         }
 
-        [HttpPut(""), Authorize(Roles = "User")]
+        [HttpPut(""), Authorize]
         public async Task<IActionResult> UpdateUser(UserUpdateDataEnvelop data)
         {
-            return Ok(await _Update.UpdateUser(data.updateData));
+            return Ok(await _Update.UpdateUser(data.updateData, Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value)));
         }
 
-        [HttpGet(""), Authorize(Roles = "User")]
+        [HttpGet(""), Authorize]
         public async Task<IActionResult> GetCurrent()
         {
             this.HttpContext.User.Claims.Single(x=> x.Type.Equals("sub"));

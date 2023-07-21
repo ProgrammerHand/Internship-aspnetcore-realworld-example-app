@@ -1,7 +1,9 @@
 ﻿using Conduit.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Conduit.Entities;
 
-namespace Conduit.Features.User.Application
+
+namespace Conduit.Features.User.Application.Queries
 {
     public class GetCurrent
     {
@@ -12,7 +14,7 @@ namespace Conduit.Features.User.Application
             _context = context;
         }
 
-        public async Task<Domain.User> GetUserByUsername(string username)
+        public async Task<Entities.User> GetUserByUsername(string username)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
         }

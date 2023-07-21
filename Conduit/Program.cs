@@ -1,8 +1,4 @@
-using Conduit.Features.User.Application;
-using Conduit.Features.User.Application.Interface;
 using Conduit.Infrastructure;
-using Conduit.Infrastructure.security;
-using Conduit.Middleware;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +6,11 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 using Serilog;
-
+using Conduit.Features.User.Application.Queries;
+using Conduit.Features.User.Application.Commands;
+using Conduit.Infrastructure.Security;
+using Conduit.Infrastructure.Security.Interface;
+using Conduit.Infrastructure.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 var authenticationSettings = new AuthenticationSettings();
@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
 });
 
 var inmemory = builder.Configuration.GetValue<bool>("UseInMemory");
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("Azure_SQL_ConnectionString") ?? throw new InvalidOperationException("Connection string 'Azure_SQL_ConnectionString' not found.");
 builder.Services.AddDbContext<ConduitContext>(options =>
 {
     if (inmemory)

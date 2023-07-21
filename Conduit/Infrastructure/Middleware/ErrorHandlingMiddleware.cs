@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using System.Net;
+﻿using System.Net;
 
-namespace Conduit.Middleware
+namespace Conduit.Infrastructure.Middleware
 {
     public class ErrorHandlingMiddleware
     {

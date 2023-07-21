@@ -1,8 +1,8 @@
-﻿using Conduit.Features.User.Domain;
-using Conduit.Infrastructure;
+﻿using Conduit.Infrastructure;
+using Conduit.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Conduit.Features.User.Application
+namespace Conduit.Features.User.Application.Queries
 {
     public class GetAll
     {
@@ -13,7 +13,7 @@ namespace Conduit.Features.User.Application
             _context = context;
         }
 
-        public async Task<List<Domain.User>> GetAllUsers()
+        public async Task<List<Entities.User>> GetAllUsers()
         {
             return await _context.Users.ToListAsync();
         }

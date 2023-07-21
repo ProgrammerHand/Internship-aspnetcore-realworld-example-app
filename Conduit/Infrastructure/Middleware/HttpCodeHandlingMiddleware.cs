@@ -1,9 +1,6 @@
-﻿using Azure;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 
-namespace Conduit.Middleware
+namespace Conduit.Infrastructure.Middleware
 {
     public class HttpCodeHandlingMiddleware
     {

@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using static Duende.IdentityServer.Models.IdentityResources;
-using System.Data;
+﻿using Conduit.Features.User.Application.Dto;
+using Microsoft.AspNetCore.Identity;
+using System.Collections;
 
-namespace Conduit.Features.User.Domain
+namespace Conduit.Entities
 {
     public class User  //:IdentityUser
     {
@@ -33,17 +32,20 @@ namespace Conduit.Features.User.Domain
 
         public string Image { get; private set; } = string.Empty;
 
+        public ICollection<Article> Articles { get; private set; }
+
         public static User CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {
             var entity = new User(email, username, passwordHash, passwordSalt);
             entity.Role = SecretRolePromotion(entity.Username);
             return entity;
         }
 
-        public void UpdateUser(UserUpdateData data, byte[] passwordHash)
+        public void UpdateUser(UserUpdateData data, byte[] passwordHash, byte[] passwordSalt)
         {
             Email = data.email;
             Username = data.username;
             PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
             Bio = data.bio;
             Image = data.image;
         }

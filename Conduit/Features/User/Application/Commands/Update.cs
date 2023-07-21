@@ -25,7 +25,7 @@ namespace Conduit.Features.User.Application.Commands
                 user.UpdateUser(data, newHashsalt.Item1, newHashsalt.Item2);
                 _context.Users.Update(user);
                 await Save();
-                return new AunthenticatedUser { email = user.Email, token = _jvtService.CreateToken(user.Username, user.Role, user.Id.ToString()), role = user.Role, username = user.Username, bio = user.Bio, image = user.Image };
+                return new AunthenticatedUser { email = user.Email, token = _jvtService.CreateToken(user.Username, user.Role, user.Id.ToString()), username = user.Username, bio = user.Bio, image = user.Image };
             }
             else
                 throw new ArgumentException("User with such email or username alredy exist");
@@ -41,9 +41,9 @@ namespace Conduit.Features.User.Application.Commands
             return await saved > 0 ? true : false;
         }
 
-        public async Task<AunthenticateUserEnvelop> UpdateUser(UserUpdateData data, int id )
+        public async Task<AunthenticatedUserEnvelop> UpdateUser(UserUpdateData data, int id )
         {
-            return new AunthenticateUserEnvelop(await UpdateUserDatabase(data, id));
+            return new AunthenticatedUserEnvelop(await UpdateUserDatabase(data, id));
         }
     }
 }

@@ -11,5 +11,5 @@
         public string image { get; init; } = null;
     }
 
-    public record AunthenticateUserEnvelop(AunthenticatedUser aunthenticatedUser);
+    public record AunthenticatedUserEnvelop(AunthenticatedUser aunthenticatedUser);
 }

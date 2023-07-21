@@ -8,20 +8,22 @@ using System.Security.Claims;
 namespace Conduit.Features.User.WebApp
 {
     [ApiController]
-    [Route("users")]
+    [Route("api/users")]
     public class Controller : ControllerBase
     {
         private readonly Registration _Registration;
         private readonly Authentication _Authenticationn;
         private readonly GetAll _GetAll;
         private readonly Update _Update;
+        private readonly GetCurrent _GetCurrent;
 
-        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllServ, Update updateServ )
+        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllServ, Update updateServ, GetCurrent getCurrentServ)
         {
             _Registration = regServ;
             _Authenticationn = aunthServ;
             _GetAll = getAllServ;
             _Update = updateServ;
+            _GetCurrent = getCurrentServ;
 
         }
         [HttpPost(""), AllowAnonymous]
@@ -51,8 +53,7 @@ namespace Conduit.Features.User.WebApp
         [HttpGet(""), Authorize]
         public async Task<IActionResult> GetCurrent()
         {
-            this.HttpContext.User.Claims.Single(x=> x.Type.Equals("sub"));
-            return Ok();
+            return Ok(_GetCurrent.GetCurrentUser(Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value)));
         }
     }
 }

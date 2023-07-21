@@ -30,7 +30,7 @@ namespace Conduit.Entities
 
         public string Image { get; private set; } = string.Empty;
         public int ArticleId { get; set; }
-        public ICollection<Article> Articles { get; private set; }
+        public ICollection<Article> Articles { get; } = new List<Article>();
 
         public static User CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {
             var entity = new User(email, username, passwordHash, passwordSalt);

@@ -13,6 +13,7 @@ namespace Conduit.Infrastructure
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Article> Articles { get; set; }
 
 
         //#region Transaction Handling

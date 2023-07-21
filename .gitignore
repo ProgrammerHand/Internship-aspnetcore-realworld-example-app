@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /Conduit/appsettings.Development.json
+/Conduit/appsettings.Production.json

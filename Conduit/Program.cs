@@ -24,7 +24,7 @@ builder.Services.AddScoped<GetAll>();
 builder.Services.AddScoped<Update>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IJWTtoken, JWTtoken>();
-builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+//builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 //Add services to the container.
 builder.Services.AddCors(options =>

@@ -30,6 +30,7 @@
         public int favoritesCount { get; private set; }
         public int AuthorId { get; private set; }
         public User? Author { get; private set; }
+
         public static Article CreateArticle(string title, string description, string body, ICollection<string>? TagList, User author)
         {
             return new Article(title, description, body, TagList, author);

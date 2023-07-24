@@ -21,7 +21,7 @@ namespace Conduit.Features.Article.Application.Commands
 
         private async Task<bool> CreateArticleDatabase(ArticleCreation data, int AuthorId)
         {
-            await _context.Articles.AddAsync(Entities.Article.CreateArticle(data.title, data.description, data.body, data.tagList, await GetUserById(AuthorId)));
+            await _context.Articles.AddAsync(Entities.Article.CreateArticle(data.title, data.description, data.body, /*data.tagList,*/ await GetUserById(AuthorId)));
             return await Save();
         }
         private async Task<bool> Save()

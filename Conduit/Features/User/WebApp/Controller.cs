@@ -7,8 +7,8 @@ using System.Security.Claims;
 
 namespace Conduit.Features.User.WebApp
 {
-    [ApiController]
     [Route("api/users")]
+    [ApiController]
     public class Controller : ControllerBase
     {
         private readonly Registration _Registration;
@@ -35,7 +35,8 @@ namespace Conduit.Features.User.WebApp
         [HttpPost("login"), AllowAnonymous]
         public async Task<IActionResult> AuthenticateUser(UserAuthenticationDataEnvelop data)
         {
-            return Ok(await _Authenticationn.Authenticate(data.authenticationData));
+            var temp = await _Authenticationn.Authenticate(data.user);
+            return Ok(temp);
         }
 
         [HttpGet("getAll"), Authorize(Roles = "Admin")]
@@ -53,7 +54,7 @@ namespace Conduit.Features.User.WebApp
         [HttpGet(""), Authorize]
         public async Task<IActionResult> GetCurrent()
         {
-            return Ok(_GetCurrent.GetCurrentUser(Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value)));
+            return Ok(await _GetCurrent.GetCurrentUser(Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value)));
         }
     }
 }

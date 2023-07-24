@@ -9,5 +9,5 @@
         public string image { get; init; } = null;
     }
 
-    public record AunthenticatedUserEnvelop(AunthenticatedUser aunthenticatedUser);
+    public record AunthenticatedUserEnvelop(AunthenticatedUser user);
 }

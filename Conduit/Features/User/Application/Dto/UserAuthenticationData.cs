@@ -7,5 +7,5 @@ namespace Conduit.Features.User.Application.Dto
             public string Password { get; init; }
     }
 
-    public record UserAuthenticationDataEnvelop(UserAuthenticationData authenticationData);
+    public record UserAuthenticationDataEnvelop(UserAuthenticationData user);
 }

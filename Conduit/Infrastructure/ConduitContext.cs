@@ -12,6 +12,11 @@ namespace Conduit.Infrastructure
         {            
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(User).Assembly);
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Article> Articles { get; set; }
 

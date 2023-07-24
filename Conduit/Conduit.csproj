@@ -41,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Article\Application\Queries\" />
     <Folder Include="Features\Weather\Application\" />
     <Folder Include="logs\" />
   </ItemGroup>

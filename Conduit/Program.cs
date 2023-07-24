@@ -12,6 +12,7 @@ using Conduit.Infrastructure.Security;
 using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure.Middleware;
 using Conduit.Features.Article.Application.Commands;
+using Conduit.Features.Article.Application.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +24,10 @@ builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Registration>(); 
 builder.Services.AddScoped<GetAll>();
+builder.Services.AddScoped<GetCurrent>();
 builder.Services.AddScoped<Update>();
 builder.Services.AddScoped<Create>();
+builder.Services.AddScoped<Feed>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IJWTtoken, JWTtoken>();
 //builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));

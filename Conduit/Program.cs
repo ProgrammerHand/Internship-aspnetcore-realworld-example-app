@@ -5,15 +5,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
-using Conduit.Features.User.Application.Queries;
-using Conduit.Features.User.Application.Commands;
 using Conduit.Infrastructure.Security;
 using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure.Middleware;
-using Conduit.Features.Article.Application.Commands;
-using Conduit.Features.Article.Application.Queries;
 using Conduit.Features.User.Infrastracture.Repository;
 using Conduit.Features.User.Application.Interfaces;
+using Conduit.Features.Article.Application.Interfaces;
+using Conduit.Features.Article.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 
         builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-        builder.Services.AddSingleton(authenticationSettings);
-        builder.Services.AddScoped<Create>();
-        builder.Services.AddScoped<Feed>();
+        builder.Services.AddSingleton(authenticationSettings);;
+        builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>(); 
         builder.Services.AddScoped<IHashingService, HashingService>();
         builder.Services.AddScoped<IJWTtoken, JWTtoken>();

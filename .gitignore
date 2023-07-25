@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 /Conduit/appsettings.Development.json
 /Conduit/appsettings.Production.json
+/Conduit.Tests/Unit/PerformanceTest.cs

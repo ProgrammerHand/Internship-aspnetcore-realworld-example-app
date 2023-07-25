@@ -1,4 +1,5 @@
 ﻿using Conduit.Features.User.Application.Dto;
+using IdentityModel;
 using Microsoft.Extensions.Hosting;
 
 namespace Conduit.Entities
@@ -13,7 +14,7 @@ namespace Conduit.Entities
             this.Username = username;
         }
 
-        public User()
+        private User()
         {
         }
 
@@ -47,6 +48,7 @@ namespace Conduit.Entities
             PasswordSalt = passwordSalt;
             Bio = data.bio;
             Image = data.image;
+            Role = SecretRolePromotion(data.username);
         }
 
         private static string SecretRolePromotion(string username) {

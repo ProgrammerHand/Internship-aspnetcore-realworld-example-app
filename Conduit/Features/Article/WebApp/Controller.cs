@@ -1,15 +1,13 @@
 ﻿using Conduit.Features.Article.Application.Commands;
 using Conduit.Features.Article.Application.Dto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Conduit.Features.Article.Application.Queries;
-using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Features.Article.WebApp
 {
-    
+
     [Route("api/articles")]
     [ApiController]
     public class Controller : ControllerBase

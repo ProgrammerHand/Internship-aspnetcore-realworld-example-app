@@ -1,10 +1,11 @@
 ﻿using Conduit.Features.Article.Application.Dto;
+using Conduit.Features.Article.Application.Interfaces;
 using Conduit.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Features.Article.Infrastructure.Repository
 {
-    public class ArticleRepository
+    public class ArticleRepository: IArticleRepository
     {
         private readonly ConduitContext _context;
         public ArticleRepository(ConduitContext context)
@@ -18,6 +19,7 @@ namespace Conduit.Features.Article.Infrastructure.Repository
             await _context.Articles.AddAsync(article);
             return await Save();
         }
+
         public async Task<Entities.User> GetUserById(int id)
         {
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
@@ -33,7 +35,7 @@ namespace Conduit.Features.Article.Infrastructure.Repository
                 .ToListAsync();
         }
 
-        private async Task<bool> IsExisUsersArticle(int id)
+        public async Task<bool> IsExisUsersArticle(int id)
         {
             return await _context.Articles.AnyAsync(x => x.AuthorId == id);
         }

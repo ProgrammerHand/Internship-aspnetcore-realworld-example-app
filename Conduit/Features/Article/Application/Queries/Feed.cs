@@ -1,9 +1,5 @@
-﻿using Conduit.Entities;
-using Conduit.Features.Article.Application.Dto;
+﻿using Conduit.Features.Article.Application.Dto;
 using Conduit.Features.Article.Application.Interfaces;
-using Conduit.Infrastructure;
-using Duende.IdentityServer.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Features.Article.Application.Queries
 {

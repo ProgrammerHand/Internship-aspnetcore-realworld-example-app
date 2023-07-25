@@ -1,6 +1,4 @@
-﻿using Conduit.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Conduit.Features.Article.Application.Dto;
+﻿using Conduit.Features.Article.Application.Dto;
 using Conduit.Features.Article.Application.Interfaces;
 
 namespace Conduit.Features.Article.Application.Commands
@@ -19,7 +17,8 @@ namespace Conduit.Features.Article.Application.Commands
 
             if (!await _repository.IsExisArticle(data.title))
             {
-                return await _repository.CreateArticleDatabase(data, authorId);
+                var entity = Entities.Article.CreateArticle(data.title, data.description, data.body, /*data.tagList,*/ await _repository.GetUserById(authorId));
+                return await _repository.CreateArticleDatabase(entity);
             }
             else
                 throw new ArgumentException("Article with such title or email alredy exists");

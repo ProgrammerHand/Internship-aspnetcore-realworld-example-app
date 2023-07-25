@@ -1,20 +1,19 @@
-﻿using Conduit.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Conduit.Features.User.Application.Interfaces;
 
 namespace Conduit.Features.User.Application.Queries
 {
     public class GetAll
     {
-        private readonly ConduitContext _context;
+        private readonly IUserRepository _repository;
 
-        public GetAll(ConduitContext context)
+        public GetAll(IUserRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<List<Entities.User>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _repository.GetAllUsers();
         }
     }
 }

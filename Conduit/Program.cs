@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
-using Serilog;
 using Conduit.Features.User.Application.Queries;
 using Conduit.Features.User.Application.Commands;
 using Conduit.Infrastructure.Security;
@@ -13,24 +12,19 @@ using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure.Middleware;
 using Conduit.Features.Article.Application.Commands;
 using Conduit.Features.Article.Application.Queries;
-using NBomber.CSharp;
-using System.Net.Http;
+using Conduit.Features.User.Infrastracture.Repository;
+using Conduit.Features.User.Application.Interfaces;
 
-
-        var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
         var authenticationSettings = new AuthenticationSettings();
 
         builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
         builder.Services.AddSingleton(authenticationSettings);
-        builder.Services.AddScoped<Authentication>();
-        builder.Services.AddScoped<Registration>();
-        builder.Services.AddScoped<GetAll>();
-        builder.Services.AddScoped<GetCurrent>();
-        builder.Services.AddScoped<Update>();
         builder.Services.AddScoped<Create>();
         builder.Services.AddScoped<Feed>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>(); 
         builder.Services.AddScoped<IHashingService, HashingService>();
         builder.Services.AddScoped<IJWTtoken, JWTtoken>();
         //builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));

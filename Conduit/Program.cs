@@ -10,8 +10,16 @@ using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure.Middleware;
 using Conduit.Features.User.Infrastracture.Repository;
 using Conduit.Features.User.Application.Interfaces;
-using Conduit.Features.Article.Application.Interfaces;
+using Conduit.Features.User.Application.Commands;
+using Conduit.Features.User.Application.Queries;
+using Conduit.Features.Article.Application.Queries;
+using Conduit.Features.Tags.Application.Interfaces;
+using Conduit.Features.Tags.Application.Commands;
+using Conduit.Features.Tags.Infrastructure.Repository;
 using Conduit.Features.Article.Infrastructure.Repository;
+using Conduit.Features.Article.Application.Interfaces;
+using Serilog;
+using Conduit.Features.Tags.Application.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,15 +27,26 @@ var builder = WebApplication.CreateBuilder(args);
 
         builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-        builder.Services.AddSingleton(authenticationSettings);;
+        builder.Services.AddSingleton(authenticationSettings);
+        builder.Services.AddScoped<Authentication>();
+        builder.Services.AddScoped<Registration>();
+        builder.Services.AddScoped<Update>();
+        builder.Services.AddScoped<GetAll>();
+        builder.Services.AddScoped<GetCurrent>();
+        builder.Services.AddScoped<Conduit.Features.Article.Application.Commands.Create>();
+        builder.Services.AddScoped<Add>();
+        builder.Services.AddScoped<Add>();
+        builder.Services.AddScoped<GetUnique>();
+        builder.Services.AddScoped<ICreate, Create>();
+        builder.Services.AddScoped<ITagsRepository, TagsRepository>();
         builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>(); 
         builder.Services.AddScoped<IHashingService, HashingService>();
         builder.Services.AddScoped<IJWTtoken, JWTtoken>();
-        //builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+        builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
-        //Add services to the container.
-        builder.Services.AddCors(options =>
+//Add services to the container.
+builder.Services.AddCors(options =>
         {
             options.AddPolicy("Front", builder =>
             {

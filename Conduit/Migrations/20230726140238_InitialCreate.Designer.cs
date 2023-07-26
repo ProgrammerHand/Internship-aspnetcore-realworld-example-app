@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conduit.Migrations
 {
     [DbContext(typeof(ConduitContext))]
-    [Migration("20230724111147_InitialCreate")]
+    [Migration("20230726140238_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -40,12 +40,18 @@ namespace Conduit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Favorited")
                         .HasColumnType("bit");
+
+                    b.Property<int>("FavoritesCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
@@ -54,13 +60,7 @@ namespace Conduit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("favoritesCount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("updatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -68,6 +68,28 @@ namespace Conduit.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("Conduit.Entities.Tags", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TagName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Conduit.Entities.User", b =>
@@ -120,6 +142,22 @@ namespace Conduit.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Conduit.Entities.Tags", b =>
+                {
+                    b.HasOne("Conduit.Entities.Article", "Article")
+                        .WithMany("TagsRelation")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+                });
+
+            modelBuilder.Entity("Conduit.Entities.Article", b =>
+                {
+                    b.Navigation("TagsRelation");
                 });
 
             modelBuilder.Entity("Conduit.Entities.User", b =>

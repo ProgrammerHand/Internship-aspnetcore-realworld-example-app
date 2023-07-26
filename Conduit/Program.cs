@@ -12,14 +12,13 @@ using Conduit.Features.User.Infrastracture.Repository;
 using Conduit.Features.User.Application.Interfaces;
 using Conduit.Features.User.Application.Commands;
 using Conduit.Features.User.Application.Queries;
-using Conduit.Features.Article.Application.Queries;
 using Conduit.Features.Tags.Application.Interfaces;
 using Conduit.Features.Tags.Application.Commands;
 using Conduit.Features.Tags.Infrastructure.Repository;
 using Conduit.Features.Article.Infrastructure.Repository;
 using Conduit.Features.Article.Application.Interfaces;
-using Serilog;
 using Conduit.Features.Tags.Application.Queries;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,131 +42,131 @@ var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddScoped<IUserRepository, UserRepository>(); 
         builder.Services.AddScoped<IHashingService, HashingService>();
         builder.Services.AddScoped<IJWTtoken, JWTtoken>();
-        builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 //Add services to the container.
 builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("Front", builder =>
+{
+    options.AddPolicy("Front", builder =>
+    {
+        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+    });
+});
+
+var inmemory = builder.Configuration.GetValue<bool>("UseInMemory");
+var connectionString = builder.Configuration.GetConnectionString("Azure_SQL_ConnectionString") ?? throw new InvalidOperationException("Connection string 'Azure_SQL_ConnectionString' not found.");
+builder.Services.AddDbContext<ConduitContext>(options =>
+{
+    if (inmemory)
+    {
+        options.UseInMemoryDatabase("InMemory");
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
+
+
+});
+
+//builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+//             .AddEntityFrameworkStores<ConduitContext>();
+
+//builder.Services.AddIdentityServer()
+//    .AddApiAuthorization<User, ConduitContext>()
+//    .AddDeveloperSigningCredential();
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = "Bearer";
+    option.DefaultScheme = "Bearer";
+    option.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        //ValidIssuer = authenticationSettings.JwtIssuer,
+        //ValidAudience = authenticationSettings.JwtIssuer,
+        //new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+    };
+})
+    .AddIdentityServerJwt();
+
+builder.Services.AddMediatR(cfg =>
+     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+// Inject an implementation of ISwaggerProvider with defaulted settings applied
+builder.Services.AddSwaggerGen(x =>
+{
+    x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer",
+    });
+
+    x.SupportNonNullableReferenceTypes();
+
+    x.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+            {   new OpenApiSecurityScheme
             {
-                builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
-            });
-        });
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()}
+    });
+    x.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1" });
+    x.CustomSchemaIds(y => y.FullName);
+    x.DocInclusionPredicate((version, apiDescription) => true);
+    //x.TagActionsBy(y => new List<string>()
+    //{
+    //                y.GroupName ?? throw new InvalidOperationException()
+    //});
+});
 
-        var inmemory = builder.Configuration.GetValue<bool>("UseInMemory");
-        var connectionString = builder.Configuration.GetConnectionString("Azure_SQL_ConnectionString") ?? throw new InvalidOperationException("Connection string 'Azure_SQL_ConnectionString' not found.");
-        builder.Services.AddDbContext<ConduitContext>(options =>
-        {
-            if (inmemory)
-            {
-                options.UseInMemoryDatabase("InMemory");
-            }
-            else
-            {
-                options.UseSqlServer(connectionString);
-            }
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger(c =>
+{
+    c.RouteTemplate = "swagger/{documentName}/swagger.json";
+});
 
-        });
+// Enable middleware to serve swagger-ui assets(HTML, JS, CSS etc.)
+app.UseSwaggerUI(x =>
+{
+    x.SwaggerEndpoint("/swagger/v1/swagger.json", "RealWorld API V1");
+});
+//}
 
-        //builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-        //             .AddEntityFrameworkStores<ConduitContext>();
+app.UseHttpsRedirection();
 
-        //builder.Services.AddIdentityServer()
-        //    .AddApiAuthorization<User, ConduitContext>()
-        //    .AddDeveloperSigningCredential();
+app.UseErrorHandlingMiddleware();
 
-        builder.Services.AddAuthentication(option =>
-        {
-            option.DefaultAuthenticateScheme = "Bearer";
-            option.DefaultScheme = "Bearer";
-            option.DefaultChallengeScheme = "Bearer";
-        }).AddJwtBearer(cfg =>
-        {
-            cfg.RequireHttpsMetadata = false;
-            cfg.SaveToken = true;
-            cfg.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                //ValidIssuer = authenticationSettings.JwtIssuer,
-                //ValidAudience = authenticationSettings.JwtIssuer,
-                //new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-            };
-        })
-            .AddIdentityServerJwt();
+app.UseHttpCodeHandlingMiddleware();
 
-        builder.Services.AddMediatR(cfg =>
-             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+app.UseAuthorization();
 
+app.MapControllers();
 
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        // Inject an implementation of ISwaggerProvider with defaulted settings applied
-        builder.Services.AddSwaggerGen(x =>
-        {
-            x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please insert JWT with Bearer into field",
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                BearerFormat = "JWT",
-                Scheme = "Bearer",
-            });
+app.UseCors("Front");
 
-            x.SupportNonNullableReferenceTypes();
-
-            x.AddSecurityRequirement(new OpenApiSecurityRequirement()
-            {
-                    {   new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                    },
-                    Array.Empty<string>()}
-            });
-            x.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1" });
-            x.CustomSchemaIds(y => y.FullName);
-            x.DocInclusionPredicate((version, apiDescription) => true);
-            //x.TagActionsBy(y => new List<string>()
-            //{
-            //                y.GroupName ?? throw new InvalidOperationException()
-            //});
-        });
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        //if (app.Environment.IsDevelopment())
-        //{
-        app.UseSwagger(c =>
-        {
-            c.RouteTemplate = "swagger/{documentName}/swagger.json";
-        });
-
-        // Enable middleware to serve swagger-ui assets(HTML, JS, CSS etc.)
-        app.UseSwaggerUI(x =>
-        {
-            x.SwaggerEndpoint("/swagger/v1/swagger.json", "RealWorld API V1");
-        });
-        //}
-
-        app.UseHttpsRedirection();
-
-        app.UseErrorHandlingMiddleware();
-
-        app.UseHttpCodeHandlingMiddleware();
-
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.UseCors("Front");
-
-        //app.UseMiddleware<ErrorHandler>;
-        app.Run();
+//app.UseMiddleware<ErrorHandler>;
+app.Run();
 
 

@@ -1,4 +1,4 @@
-﻿using Conduit.Features.User.Application.Interfaces;
+﻿using Conduit.Infrastructure.Repository.Interfaces;
 
 namespace Conduit.Features.User.Application.Queries
 {

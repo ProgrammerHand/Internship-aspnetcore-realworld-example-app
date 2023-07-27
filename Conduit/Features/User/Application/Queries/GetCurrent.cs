@@ -1,5 +1,5 @@
 ﻿using Conduit.Features.User.Application.Dto;
-using Conduit.Features.User.Application.Interfaces;
+using Conduit.Infrastructure.Repository.Interfaces;
 using Conduit.Infrastructure.Security.Interface;
 
 

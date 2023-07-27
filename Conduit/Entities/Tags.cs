@@ -3,27 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Conduit.Entities
 {
+
     public class Tags
     {
         public int Id { get; private set; }
         public string TagName { get; private set; }
-        public int ArticleId { get; private set; }
-        public Article Article { get; private set; }
+        private ICollection<Article> _articles = new List<Article>();
+        public IEnumerable<Article> Articles => _articles.ToList().AsReadOnly();
 
-        private Tags(string name, int articleId)
+        private Tags(string name)
         {
             TagName = name;
-            ArticleId = articleId;
         }
 
         private Tags()
         {
         }
 
-        public static Tags CreateTag (string name, int articleId) 
+        public static Tags CreateTag(string name) 
         {
-            return new Tags(name, articleId);
+            return new Tags(name);
         }
-
     }
 }

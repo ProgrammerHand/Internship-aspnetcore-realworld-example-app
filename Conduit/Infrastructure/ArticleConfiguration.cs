@@ -7,7 +7,7 @@ namespace Conduit.Infrastructure
     {
         public void Configure(EntityTypeBuilder<Article> builder)
         {
-            builder.HasMany(a => a.TagsRelation).WithOne(t => t.Article).HasForeignKey(t => t.ArticleId);
+            builder.HasMany(a => a.Tags).WithMany(t => t.Articles);
         }
     }
 }

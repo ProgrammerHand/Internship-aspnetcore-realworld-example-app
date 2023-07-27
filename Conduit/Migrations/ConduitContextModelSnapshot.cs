@@ -22,6 +22,21 @@ namespace Conduit.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ArticleTags", b =>
+                {
+                    b.Property<int>("ArticlesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticlesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("ArticleTags");
+                });
+
             modelBuilder.Entity("Conduit.Entities.Article", b =>
                 {
                     b.Property<int>("Id")
@@ -75,16 +90,11 @@ namespace Conduit.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TagName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ArticleId");
 
                     b.ToTable("Tags");
                 });
@@ -130,6 +140,21 @@ namespace Conduit.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ArticleTags", b =>
+                {
+                    b.HasOne("Conduit.Entities.Article", null)
+                        .WithMany()
+                        .HasForeignKey("ArticlesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Conduit.Entities.Tags", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Conduit.Entities.Article", b =>
                 {
                     b.HasOne("Conduit.Entities.User", "Author")
@@ -139,22 +164,6 @@ namespace Conduit.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Conduit.Entities.Tags", b =>
-                {
-                    b.HasOne("Conduit.Entities.Article", "Article")
-                        .WithMany("TagsRelation")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Article");
-                });
-
-            modelBuilder.Entity("Conduit.Entities.Article", b =>
-                {
-                    b.Navigation("TagsRelation");
                 });
 
             modelBuilder.Entity("Conduit.Entities.User", b =>

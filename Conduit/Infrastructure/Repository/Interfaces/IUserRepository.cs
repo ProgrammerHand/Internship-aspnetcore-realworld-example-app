@@ -1,7 +1,7 @@
 ﻿using Conduit.Features.User.Application.Dto;
 using Conduit.Infrastructure.Security.Interface;
 
-namespace Conduit.Features.User.Application.Interfaces
+namespace Conduit.Infrastructure.Repository.Interfaces
 {
     public interface IUserRepository
     {

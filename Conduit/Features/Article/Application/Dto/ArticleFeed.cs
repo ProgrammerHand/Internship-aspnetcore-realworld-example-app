@@ -7,7 +7,7 @@
         public string title { get; set; }
         public string description { get; set; }
         public string body { get; set; }
-        public List<string> tagList { get; set; }
+        public IEnumerable<string> tagList { get; set; }
         public bool favorited { get; set; }
         public int favoritesCount { get; set; }
         public DateTime createdAt { get; set; }

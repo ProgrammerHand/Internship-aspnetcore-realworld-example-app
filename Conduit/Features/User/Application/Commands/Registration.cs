@@ -1,7 +1,7 @@
 ﻿using Conduit.Features.User.Application.Dto;
 using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure;
-using Conduit.Features.User.Application.Interfaces;
+using Conduit.Infrastructure.Repository.Interfaces;
 
 namespace Conduit.Features.User.Application.Commands
 {

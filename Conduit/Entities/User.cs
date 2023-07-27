@@ -32,7 +32,7 @@ namespace Conduit.Entities
 
         public string Image { get; private set; } = string.Empty;
 
-        public List<Article>? Articles { get; private set; } = new List<Article>();
+        public ICollection<Article>? Articles { get; private set; } = new List<Article>();
 
         public static User CreateUser(string email, string username, byte[] passwordHash, byte[] passwordSalt) {
             var entity = new User(email, username, passwordHash, passwordSalt);
@@ -40,11 +40,12 @@ namespace Conduit.Entities
             return entity;
         }
 
-        public User addArticles (List<Article> articles) 
-        {
-            Articles = articles;
-            return this;
-        }
+        //public User addArticles (List<Article> articles) 
+        //{
+        //    Articles.Clear();
+        //    Articles = articles;
+        //    return this;
+        //}
 
         public void UpdateUser(UserUpdateData data, byte[] passwordHash, byte[] passwordSalt)
         {

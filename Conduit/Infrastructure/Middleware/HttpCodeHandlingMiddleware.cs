@@ -30,11 +30,7 @@ namespace Conduit.Infrastructure.Middleware
             };
             if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized || context.Response.StatusCode == (int)HttpStatusCode.Forbidden)
                 await context.Response.WriteAsJsonAsync(error);
-
         }
-
-        
-
     }
 
     public static class HttpCodeHandlingMiddlewareExtension

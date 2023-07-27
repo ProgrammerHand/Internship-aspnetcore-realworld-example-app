@@ -8,40 +8,35 @@ using System.Text;
 using Conduit.Infrastructure.Security;
 using Conduit.Infrastructure.Security.Interface;
 using Conduit.Infrastructure.Middleware;
-using Conduit.Features.User.Infrastracture.Repository;
-using Conduit.Features.User.Application.Interfaces;
 using Conduit.Features.User.Application.Commands;
 using Conduit.Features.User.Application.Queries;
-using Conduit.Features.Tags.Application.Interfaces;
-using Conduit.Features.Tags.Application.Commands;
-using Conduit.Features.Tags.Infrastructure.Repository;
-using Conduit.Features.Article.Infrastructure.Repository;
-using Conduit.Features.Article.Application.Interfaces;
-using Conduit.Features.Tags.Application.Queries;
 using Serilog;
+using Conduit.Features.Article.Application.Queries;
+using Conduit.Infrastructure.Repository;
+using Conduit.Infrastructure.Repository.Interfaces;
+using Conduit.Features.Article.Application.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
-        var authenticationSettings = new AuthenticationSettings();
+var authenticationSettings = new AuthenticationSettings();
 
-        builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
-        builder.Services.AddSingleton(authenticationSettings);
-        builder.Services.AddScoped<Authentication>();
-        builder.Services.AddScoped<Registration>();
-        builder.Services.AddScoped<Update>();
-        builder.Services.AddScoped<GetAll>();
-        builder.Services.AddScoped<GetCurrent>();
-        builder.Services.AddScoped<Conduit.Features.Article.Application.Commands.Create>();
-        builder.Services.AddScoped<Add>();
-        builder.Services.AddScoped<Add>();
-        builder.Services.AddScoped<GetUnique>();
-        builder.Services.AddScoped<ICreate, Create>();
-        builder.Services.AddScoped<ITagsRepository, TagsRepository>();
-        builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>(); 
-        builder.Services.AddScoped<IHashingService, HashingService>();
-        builder.Services.AddScoped<IJWTtoken, JWTtoken>();
+builder.Services.AddSingleton(authenticationSettings);
+builder.Services.AddScoped<Authentication>();
+builder.Services.AddScoped<Registration>();
+builder.Services.AddScoped<Update>();
+builder.Services.AddScoped<GetAll>();
+builder.Services.AddScoped<GetCurrent>();
+builder.Services.AddScoped<ArticleCreationHandler>();
+builder.Services.AddScoped<AddTags>();
+builder.Services.AddScoped<Feed>();
+builder.Services.AddScoped<CreateTags>();
+builder.Services.AddScoped<ITagsRepository, TagsRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>(); 
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IJWTtoken, JWTtoken>();
 
 //Add services to the container.
 builder.Services.AddCors(options =>

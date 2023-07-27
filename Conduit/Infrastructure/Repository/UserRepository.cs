@@ -1,11 +1,9 @@
-﻿using Conduit.Features.User.Application.Commands;
-using Conduit.Features.User.Application.Dto;
-using Conduit.Features.User.Application.Interfaces;
-using Conduit.Infrastructure;
+﻿using Conduit.Features.User.Application.Dto;
+using Conduit.Infrastructure.Repository.Interfaces;
 using Conduit.Infrastructure.Security.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace Conduit.Features.User.Infrastracture.Repository
+namespace Conduit.Infrastructure.Repository
 {
     public class UserRepository : IUserRepository
     {
@@ -32,9 +30,9 @@ namespace Conduit.Features.User.Infrastracture.Repository
             return await _context.Users.AsNoTracking().Select(x => new AunthenticatedUserData { id = x.Id, email = x.Email, role = x.Role, username = x.Username, bio = x.Bio, image = x.Image }).FirstOrDefaultAsync(x => x.id == id);
         }
 
-        public async Task<Entities.User> GetUser(int id) 
+        public async Task<Entities.User> GetUser(int id)
         {
-           return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Entities.User>> GetAllUsers()

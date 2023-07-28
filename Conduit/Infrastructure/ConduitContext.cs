@@ -1,5 +1,6 @@
 ﻿using Conduit.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Conduit.Infrastructure
 {
@@ -14,8 +15,7 @@ namespace Conduit.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(User).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Article).Assembly);
+            modelBuilder.ApplyConfiguration(new ArticleConfiguration());
         }
 
         public DbSet<User> Users { get; set; }

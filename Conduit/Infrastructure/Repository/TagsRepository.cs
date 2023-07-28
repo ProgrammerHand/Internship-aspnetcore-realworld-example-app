@@ -21,7 +21,7 @@ namespace Conduit.Infrastructure.Repository
 
         public async Task<List<Tags>> GetTagsByName(IEnumerable<string> names)
         {
-            return await _context.Tags.AsNoTracking().Where(t => names.Contains(t.TagName)).ToListAsync();
+            return await _context.Tags.Include(t => t.Articles).Where(t => names.Contains(t.TagName)).ToListAsync();
         }
 
         public async Task CreateTag(Tags tag)

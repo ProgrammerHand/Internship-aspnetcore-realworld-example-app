@@ -7,6 +7,7 @@ namespace Conduit.Infrastructure
     {
         public void Configure(EntityTypeBuilder<Tags> builder)
         {
+            builder.HasMany(t => t.Articles).WithMany(a => a.Tags);
         }
     }
 }

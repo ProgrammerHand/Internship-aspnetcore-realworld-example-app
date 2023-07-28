@@ -56,10 +56,9 @@ namespace Conduit.Infrastructure.Repository
             return await _context.Users.AnyAsync(x => x.Email == email && x.Username == username);
         }
 
-        public async Task<bool> CreateUser(Entities.User newUser)
+        public async Task CreateUser(Entities.User newUser)
         {
             await _context.Users.AddAsync(newUser);
-            return await Save();
         }
         public async Task<bool> Save()
         {

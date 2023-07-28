@@ -1,6 +1,4 @@
-﻿using Conduit.Features.User.Application.Dto;
-using IdentityModel;
-using Microsoft.Extensions.Hosting;
+﻿using Conduit.Features.User.Application.Commands;
 
 namespace Conduit.Entities
 {
@@ -39,13 +37,6 @@ namespace Conduit.Entities
             entity.Role = SecretRolePromotion(entity.Username);
             return entity;
         }
-
-        //public User addArticles (List<Article> articles) 
-        //{
-        //    Articles.Clear();
-        //    Articles = articles;
-        //    return this;
-        //}
 
         public void UpdateUser(UserUpdateData data, byte[] passwordHash, byte[] passwordSalt)
         {

@@ -4,12 +4,22 @@ using Conduit.Infrastructure.Security.Interface;
 
 namespace Conduit.Features.User.Application.Commands
 {
-    public class Update
+    public class UserUpdateData
+    {
+        public string email { get; set; }
+        public string password { get; set; }
+        public string username { get; init; }
+        public string bio { get; init; }
+        public string image { get; init; }
+    }
+
+    public class UserUpdateHandler
     {
         private readonly IUserRepository _repository;
         private readonly IHashingService _hashingService;
         private readonly IJWTtoken _jvtService;
-        public Update(IUserRepository repository, IHashingService hashingService, IJWTtoken jwtService)
+
+        public UserUpdateHandler(IUserRepository repository, IHashingService hashingService, IJWTtoken jwtService)
         {
             _repository = repository;
             _hashingService = hashingService;

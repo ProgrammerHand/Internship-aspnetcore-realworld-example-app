@@ -3,12 +3,12 @@ using Conduit.Infrastructure.Repository.Interfaces;
 
 namespace Conduit.Features.Article.Application.Queries
 {
-    public class Feed
+    public class FeedArticlesHandler
     {
 
         private readonly IArticleRepository _repository;
 
-        public Feed(IArticleRepository repository)
+        public FeedArticlesHandler(IArticleRepository repository)
         {
             _repository = repository;
         }

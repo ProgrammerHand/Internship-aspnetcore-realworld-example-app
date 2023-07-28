@@ -1,4 +1,5 @@
-﻿using Conduit.Features.Article.Application.Dto;
+﻿using Conduit.Entities;
+using Conduit.Features.Article.Application.Dto;
 using Conduit.Infrastructure;
 using Conduit.Infrastructure.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,10 @@ namespace Conduit.Infrastructure.Repository
             _context = context;
         }
 
-
-        public async Task CreateArticleDatabase(Entities.Article article)
+        public async Task CreateArticleInDatabase(Entities.Article article)
         {
-            foreach (var tag in article.Tags)
-                _context.Tags.Attach(tag);
+            //foreach (var tag in article.Tags)
+            //    _context.Tags.Attach(tag);
             await _context.Articles.AddAsync(article);
 
         }
@@ -37,10 +37,17 @@ namespace Conduit.Infrastructure.Repository
         {
             return await _context.Articles.AsNoTracking().FirstOrDefaultAsync(x => x.Title == title);
         }
+
+        public async Task<Entities.Article> GetArticleBySlugAndUser(string slug, int userId)
+        {
+            return await _context.Articles.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Slug == slug && x.AuthorId == userId);
+        }
+
         public async Task<Entities.Article> GetArticleByTitleAndUser(string title, int userId)
         {
-            return await _context.Articles.AsNoTracking().FirstOrDefaultAsync(x => x.Title == title && x.AuthorId == userId);
+            return await _context.Articles.Include(x => x.Tags).FirstOrDefaultAsync(x => x.Title == title && x.AuthorId == userId);
         }
+
         public async Task<ICollection<ArticleFeed>> GetArticlesByUser(int userId, int limit, int offset)
         {
             return await _context.Articles.AsNoTracking()

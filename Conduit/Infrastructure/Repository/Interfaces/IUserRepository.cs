@@ -13,7 +13,7 @@ namespace Conduit.Infrastructure.Repository.Interfaces
         Task UpdateUserDatabase(Entities.User user);
         Task<bool> IsExistUser(int id, string email, string username);
         Task<bool> IsExistUser(string email, string username);
-        Task<bool> CreateUser(Entities.User newUser);
+        Task CreateUser(Entities.User newUser);
         Task<bool> Save();
     }
 }

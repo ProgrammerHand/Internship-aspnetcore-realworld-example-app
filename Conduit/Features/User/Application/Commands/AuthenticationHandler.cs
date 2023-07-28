@@ -4,20 +4,26 @@ using Conduit.Infrastructure.Security.Interface;
 
 namespace Conduit.Features.User.Application.Commands
 {
-    public class Authentication
+    public class UserAuthenticationData
+    {
+        public string Email { get; init; }
+        public string Password { get; init; }
+    }
+
+
+    public class AuthenticationHandler
     {
         private readonly IUserRepository _repository;
         private readonly IHashingService _hashingService;
         private readonly IJWTtoken _jvtService;
 
-        public Authentication(IHashingService hashingService, IJWTtoken jwtService, IUserRepository repository)
+        public AuthenticationHandler(IHashingService hashingService, IJWTtoken jwtService, IUserRepository repository)
         {
             _repository = repository;
             _hashingService = hashingService;
             _jvtService = jwtService;
         }
   
-
         public async Task<AunthenticatedUserEnvelop> Authenticate(UserAuthenticationData data)
         {
             if (_hashingService.VerifyPassword(data.Password, await _repository.GetPasswordHash(data.Email)))

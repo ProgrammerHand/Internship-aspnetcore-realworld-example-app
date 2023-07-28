@@ -1,5 +1,4 @@
 ﻿using Conduit.Features.User.Application.Commands;
-using Conduit.Features.User.Application.Dto;
 using Conduit.Features.User.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +8,15 @@ namespace Conduit.Features.User.WebApp
 {
     [Route("api/users")]
     [ApiController]
-    public class Controller : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly Registration _Registration;
-        private readonly Authentication _Authenticationn;
+        private readonly RegistrationHandler _Registration;
+        private readonly AuthenticationHandler _Authenticationn;
         private readonly GetAll _GetAll;
-        private readonly Update _Update;
+        private readonly UserUpdateHandler _Update;
         private readonly GetCurrent _GetCurrent;
 
-        public Controller(Registration regServ, Authentication aunthServ, GetAll getAllServ, Update updateServ, GetCurrent getCurrentServ)
+        public UserController(RegistrationHandler regServ, AuthenticationHandler aunthServ, GetAll getAllServ, UserUpdateHandler updateServ, GetCurrent getCurrentServ)
         {
             _Registration = regServ;
             _Authenticationn = aunthServ;

@@ -9,7 +9,7 @@ namespace Conduit.Entities
         public int Id { get; private set; }
         public string TagName { get; private set; }
         private ICollection<Article> _articles = new List<Article>();
-        public IEnumerable<Article> Articles => _articles.ToList().AsReadOnly();
+        public IEnumerable<Article> Articles => _articles;
 
         private Tags(string name)
         {

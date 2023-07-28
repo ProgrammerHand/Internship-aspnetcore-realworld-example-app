@@ -2,11 +2,11 @@
 
 namespace Conduit.Features.Article.Application.Commands
 {
-    public class CreateTags
+    public class CreateTagsHandler
     {
         private readonly ITagsRepository _repository;
 
-        public CreateTags(ITagsRepository repository)
+        public CreateTagsHandler(ITagsRepository repository)
         {
             _repository = repository;
         }

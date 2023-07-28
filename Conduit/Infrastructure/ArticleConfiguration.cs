@@ -1,9 +1,10 @@
 ﻿using Conduit.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Conduit.Infrastructure
 {
-    public class ArticleConfiguration
+    public class ArticleConfiguration : IEntityTypeConfiguration<Article>
     {
         public void Configure(EntityTypeBuilder<Article> builder)
         {

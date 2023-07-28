@@ -4,23 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Conduit.Features.Article.Application.Queries;
 using System.Drawing.Drawing2D;
+using Conduit.Features.Article.Application.Dto;
 
 namespace Conduit.Features.Article.WebApp
 {
 
     [Route("api/articles")]
     [ApiController]
-    public class Controller : ControllerBase
+    public class ArticleController : ControllerBase
     {
         private readonly ArticleCreationHandler _createArticle;
-        private readonly Feed _feed;
-        private readonly AddTags _addTags;
+        private readonly FeedArticlesHandler _feed;
+        private readonly AddTagsHandler _addTags;
+        private readonly DeleteTagsFromArticleHandler _deleteTags;
 
-        public Controller(ArticleCreationHandler createServ, Feed feedServ, AddTags addTagsServ)
+        public ArticleController(ArticleCreationHandler createServ, FeedArticlesHandler feedServ, AddTagsHandler addTagsServ, DeleteTagsFromArticleHandler deleteTags)
         {
             _createArticle = createServ;
             _feed = feedServ;
             _addTags = addTagsServ;
+            _deleteTags = deleteTags;
         }
 
         [HttpPost(""), AllowAnonymous]
@@ -36,9 +39,15 @@ namespace Conduit.Features.Article.WebApp
         }
 
         [HttpPost("/tags/add"), Authorize]
-        public async Task<IActionResult> UpdateArticleTags(AddTagsData data)
+        public async Task<IActionResult> UpdateArticleTags(TagsManipulationData data)
         {
             return Ok(await _addTags.AddTagsToArticle(data.names, data.title , Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+        }
+
+        [HttpDelete("/tags/delete"), Authorize]
+        public async Task<IActionResult> DeleteArticleTags(TagsManipulationData data)
+        {
+            return Ok(await _deleteTags.DeleteTagsFromArticle(data.names, data.title, Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
     }
 }

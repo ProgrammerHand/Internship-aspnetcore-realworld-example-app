@@ -13,9 +13,9 @@ namespace Conduit.Features.Article.Application.Commands
     public class ArticleCreationHandler
     {
         private readonly IArticleRepository _repository;
-        private readonly CreateTags _createTags;
+        private readonly CreateTagsHandler _createTags;
 
-        public ArticleCreationHandler(IArticleRepository repository, CreateTags createTagsServ)
+        public ArticleCreationHandler(IArticleRepository repository, CreateTagsHandler createTagsServ)
         {
             _repository = repository;
             _createTags = createTagsServ;
@@ -26,10 +26,11 @@ namespace Conduit.Features.Article.Application.Commands
 
             if (await _repository.IsExisArticle(data.title))
                 throw new ArgumentException("Article with such title or email alredy exists");
-            var entity = Entities.Article.CreateArticle(data.title, data.description, data.body, await _repository.GetUserById(authorId));
+
+            var entity = Entities.Article.CreateArticle(data.title, data.description, data.body, authorId);
             var tags = await _createTags.CreateTagsList(data.tagList);
-            entity.SetTags(tags);
-            await _repository.CreateArticleDatabase(entity);
+            entity.AddTags(tags);
+            await _repository.CreateArticleInDatabase(entity);
             return await _repository.Save();
                
 

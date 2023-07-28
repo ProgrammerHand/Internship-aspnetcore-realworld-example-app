@@ -20,7 +20,12 @@ namespace Conduit.Features.User.Application.Queries
         public async Task<AunthenticatedUser> GetCurrentUser(int id) 
         {
             var aunthUserData = await _repository.GetAunthUser(id);
-            return new AunthenticatedUser { email = aunthUserData.email, token = _jvtService.CreateToken(aunthUserData.username, aunthUserData.role, aunthUserData.id.ToString()), username = aunthUserData.username, bio = aunthUserData.bio, image = aunthUserData.image};
+            return new AunthenticatedUser { 
+                email = aunthUserData.email,
+                token = _jvtService.CreateToken(aunthUserData.username, aunthUserData.role, aunthUserData.id.ToString()),
+                username = aunthUserData.username,
+                bio = aunthUserData.bio,
+                image = aunthUserData.image};
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Conduit.Features.Article.Application.Queries
         public async Task<ArticleFeedEnvelop> FeedArticles(int userId, int limit, int offset)
         {
 
-            if (await _repository.IsExisUsersArticle(userId))
+            if (await _repository.IsExistUsersArticle(userId))
             {
                 var list = await _repository.GetArticlesByUser(userId, limit, offset);
                 return new ArticleFeedEnvelop (list, list.Count ) ;

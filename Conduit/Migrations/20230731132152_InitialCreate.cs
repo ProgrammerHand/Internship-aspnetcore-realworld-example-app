@@ -71,7 +71,7 @@ namespace Conduit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArticleTags",
+                name: "ArticleTag",
                 columns: table => new
                 {
                     ArticlesId = table.Column<int>(type: "int", nullable: false),
@@ -79,19 +79,47 @@ namespace Conduit.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArticleTags", x => new { x.ArticlesId, x.TagsId });
+                    table.PrimaryKey("PK_ArticleTag", x => new { x.ArticlesId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_ArticleTags_Articles_ArticlesId",
+                        name: "FK_ArticleTag_Articles_ArticlesId",
                         column: x => x.ArticlesId,
                         principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArticleTags_Tags_TagsId",
+                        name: "FK_ArticleTag_Tags_TagsId",
                         column: x => x.TagsId,
                         principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ArticleId = table.Column<int>(type: "int", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => new { x.ArticleId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Comment_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comment_Users_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -100,22 +128,30 @@ namespace Conduit.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticleTags_TagsId",
-                table: "ArticleTags",
+                name: "IX_ArticleTag_TagsId",
+                table: "ArticleTag",
                 column: "TagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_AuthorId",
+                table: "Comment",
+                column: "AuthorId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ArticleTags");
+                name: "ArticleTag");
 
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Articles");
 
             migrationBuilder.DropTable(
                 name: "Users");

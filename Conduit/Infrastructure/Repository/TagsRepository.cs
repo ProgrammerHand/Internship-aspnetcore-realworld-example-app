@@ -14,17 +14,17 @@ namespace Conduit.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<Tags> GetTag(string name)
+        public async Task<Tag> GetTag(string name)
         {
             return await _context.Tags.AsNoTracking().FirstOrDefaultAsync(x => x.TagName == name);
         }
 
-        public async Task<List<Tags>> GetTagsByName(IEnumerable<string> names)
+        public async Task<List<Tag>> GetTagsByName(IEnumerable<string> names)
         {
             return await _context.Tags.Include(t => t.Articles).Where(t => names.Contains(t.TagName)).ToListAsync();
         }
 
-        public async Task CreateTag(Tags tag)
+        public async Task CreateTag(Tag tag)
         {
             await _context.Tags.AddAsync(tag);
         }

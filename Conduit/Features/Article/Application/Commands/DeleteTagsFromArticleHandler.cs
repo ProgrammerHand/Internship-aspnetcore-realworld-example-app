@@ -6,10 +6,10 @@ namespace Conduit.Features.Article.Application.Commands
     {
 
         private readonly ITagsRepository _repositoryTags;
-        private readonly CreateTagsHandler _createTags;
+        private readonly TagsCreationHandler _createTags;
         private readonly IArticleRepository _repositoryArticle;
 
-        public DeleteTagsFromArticleHandler(ITagsRepository repositoryTags, IArticleRepository repositoryArticle, CreateTagsHandler createTags)
+        public DeleteTagsFromArticleHandler(ITagsRepository repositoryTags, IArticleRepository repositoryArticle, TagsCreationHandler createTags)
         {
             _repositoryTags = repositoryTags;
             _repositoryArticle = repositoryArticle;

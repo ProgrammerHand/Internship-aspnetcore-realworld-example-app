@@ -4,25 +4,25 @@ using System.ComponentModel.DataAnnotations;
 namespace Conduit.Entities
 {
 
-    public class Tags
+    public class Tag
     {
         public int Id { get; private set; }
         public string TagName { get; private set; }
         private ICollection<Article> _articles = new List<Article>();
         public IEnumerable<Article> Articles => _articles;
 
-        private Tags(string name)
+        private Tag(string name)
         {
             TagName = name;
         }
 
-        private Tags()
+        private Tag()
         {
         }
 
-        public static Tags CreateTag(string name) 
+        public static Tag CreateTag(string name) 
         {
-            return new Tags(name);
+            return new Tag(name);
         }
     }
 }

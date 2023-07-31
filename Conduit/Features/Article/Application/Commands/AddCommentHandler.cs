@@ -1,23 +1,30 @@
 ﻿using Conduit.Infrastructure.Repository.Interfaces;
+using Conduit.Features.Article.Application.Commands;
 
 namespace Conduit.Features.Article.Application.Commands
 {
+    public class AddCommentCommand
+    {
+        public string body { get; init; }
+    }
+
     public class AddCommentHandler
     {
-        private readonly CreateTagsHandler _createTags;
         private readonly IArticleRepository _repositoryArticle;
+        private readonly CommentCreationHandler _commentCreation;
 
-        public AddCommentHandler(IArticleRepository repositoryArticle, CreateTagsHandler createTags)
+        public AddCommentHandler(IArticleRepository repositoryArticle, CommentCreationHandler commentCreationServ)
         {
             _repositoryArticle = repositoryArticle;
+            _commentCreation = commentCreationServ;
         }
 
-        public async Task<bool> AddCommentoArticle(string body, string slug, int author)
+        public async Task<bool> AddCommentoArticle(AddCommentCommand data, string slug, int authorId)
         {
-            var entity = await _repositoryArticle.GetArticleByTitleAndUser(slug, author);
-            //entity.AddTags(tags);
-            await _repositoryArticle.UpdateArticle(entity);
-            return await _repositoryArticle.Save();
+            var entity = await _repositoryArticle.GetArticleBySlug(slug);
+            var comment = await _commentCreation.CreateComment(data.body, authorId);
+            entity.AddComent(comment);  
+            return await _repositoryArticle.UpdateArticle(entity);
         }
     }
 }

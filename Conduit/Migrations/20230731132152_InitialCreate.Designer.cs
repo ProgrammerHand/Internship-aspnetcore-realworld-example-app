@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conduit.Migrations
 {
     [DbContext(typeof(ConduitContext))]
-    [Migration("20230728100541_InitialCreate")]
+    [Migration("20230731132152_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Conduit.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ArticleTags", b =>
+            modelBuilder.Entity("ArticleTag", b =>
                 {
                     b.Property<int>("ArticlesId")
                         .HasColumnType("int");
@@ -37,7 +37,7 @@ namespace Conduit.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("ArticleTags");
+                    b.ToTable("ArticleTag");
                 });
 
             modelBuilder.Entity("Conduit.Entities.Article", b =>
@@ -85,7 +85,7 @@ namespace Conduit.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("Conduit.Entities.Tags", b =>
+            modelBuilder.Entity("Conduit.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,7 +143,7 @@ namespace Conduit.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ArticleTags", b =>
+            modelBuilder.Entity("ArticleTag", b =>
                 {
                     b.HasOne("Conduit.Entities.Article", null)
                         .WithMany()
@@ -151,7 +151,7 @@ namespace Conduit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Conduit.Entities.Tags", null)
+                    b.HasOne("Conduit.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,7 +166,49 @@ namespace Conduit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("Conduit.Entities.Comment", "Comments", b1 =>
+                        {
+                            b1.Property<int>("ArticleId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int?>("AuthorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Body")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime>("UpdatedAt")
+                                .HasColumnType("datetime2");
+
+                            b1.HasKey("ArticleId", "Id");
+
+                            b1.HasIndex("AuthorId");
+
+                            b1.ToTable("Comment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArticleId");
+
+                            b1.HasOne("Conduit.Entities.User", "Author")
+                                .WithMany()
+                                .HasForeignKey("AuthorId");
+
+                            b1.Navigation("Author");
+                        });
+
                     b.Navigation("Author");
+
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Conduit.Entities.User", b =>

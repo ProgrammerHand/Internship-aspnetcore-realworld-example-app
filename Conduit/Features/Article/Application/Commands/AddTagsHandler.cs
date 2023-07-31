@@ -4,10 +4,10 @@ namespace Conduit.Features.Article.Application.Commands
 {
     public class AddTagsHandler
     {
-        private readonly CreateTagsHandler _createTags;
+        private readonly TagsCreationHandler _createTags;
         private readonly IArticleRepository _repositoryArticle;
 
-        public AddTagsHandler(IArticleRepository repositoryArticle , CreateTagsHandler createTags)
+        public AddTagsHandler(IArticleRepository repositoryArticle , TagsCreationHandler createTags)
         {
             _repositoryArticle = repositoryArticle;
             _createTags = createTags;

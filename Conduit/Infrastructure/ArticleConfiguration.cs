@@ -9,6 +9,10 @@ namespace Conduit.Infrastructure
         public void Configure(EntityTypeBuilder<Article> builder)
         {
             builder.HasMany(a => a.Tags).WithMany(t => t.Articles);
+            builder.OwnsMany(a => a.Comments, a =>
+            {
+                a.WithOwner().HasForeignKey(c => c.ArticleId);
+            });
         }
     }
 }

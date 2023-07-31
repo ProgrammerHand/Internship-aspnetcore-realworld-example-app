@@ -1,6 +1,6 @@
 ﻿namespace Conduit.Entities
 {
-    public class Comments
+    public class Comment
     {
         public int Id { get; private set; }
 
@@ -10,9 +10,11 @@
 
         public DateTime UpdatedAt { get; private set; }
 
-        public User Author { get; private set; }
+        public int ArticleId { get; private set; }
 
-        private Comments(string body, User author)
+        public User? Author { get; private set; }
+
+        private Comment(string body, User author)
         {
             Body = body;
             CreatedAt = DateTime.UtcNow;
@@ -20,14 +22,14 @@
             Author = author;
         }
 
-        private Comments()
+        private Comment()
         {
             
         }
 
-        public Comments CreateComment (string body, User author)
+        public static Comment CreateComment (string body, User author)
         {
-            return new Comments(body, author);
+            return new Comment(body, author);
         }
 
 

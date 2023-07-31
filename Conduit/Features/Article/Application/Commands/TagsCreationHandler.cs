@@ -2,24 +2,24 @@
 
 namespace Conduit.Features.Article.Application.Commands
 {
-    public class CreateTagsHandler
+    public class TagsCreationHandler
     {
         private readonly ITagsRepository _repository;
 
-        public CreateTagsHandler(ITagsRepository repository)
+        public TagsCreationHandler(ITagsRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<List<Entities.Tags>> CreateTagsList(List<string> names) 
+        public async Task<List<Entities.Tag>> CreateTagsList(List<string> names) 
         {
-            var tags = new List<Entities.Tags>();
+            var tags = new List<Entities.Tag>();
             foreach (var tag in names ?? Enumerable.Empty<string>())
             {
                 var existingTags = await _repository.GetTagsByName(names);
                 var entity = existingTags.FirstOrDefault(t => t.TagName == tag);
                 if (entity is null)
-                    tags.Add(Entities.Tags.CreateTag(tag));
+                    tags.Add(Entities.Tag.CreateTag(tag));
                 else
                     tags.Add(entity);
 

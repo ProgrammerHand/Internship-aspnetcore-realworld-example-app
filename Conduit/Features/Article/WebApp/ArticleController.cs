@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Conduit.Features.Article.Application.Queries;
-using System.Drawing.Drawing2D;
 using Conduit.Features.Article.Application.Dto;
 
 namespace Conduit.Features.Article.WebApp
@@ -17,13 +16,18 @@ namespace Conduit.Features.Article.WebApp
         private readonly FeedArticlesHandler _feed;
         private readonly AddTagsHandler _addTags;
         private readonly DeleteTagsFromArticleHandler _deleteTags;
+        private readonly AddCommentHandler _addComment;
+        private readonly GetCommentsFromArticleHandler _getComment;
 
-        public ArticleController(ArticleCreationHandler createServ, FeedArticlesHandler feedServ, AddTagsHandler addTagsServ, DeleteTagsFromArticleHandler deleteTags)
+        public ArticleController(ArticleCreationHandler createServ, FeedArticlesHandler feedServ, AddTagsHandler addTagsServ,
+            DeleteTagsFromArticleHandler deleteTags, AddCommentHandler addCommentServ, GetCommentsFromArticleHandler getCommentsServ)
         {
             _createArticle = createServ;
             _feed = feedServ;
             _addTags = addTagsServ;
             _deleteTags = deleteTags;
+            _addComment = addCommentServ;
+            _getComment = getCommentsServ;
         }
 
         [HttpPost(""), AllowAnonymous]
@@ -44,10 +48,16 @@ namespace Conduit.Features.Article.WebApp
             return Ok(await _addTags.AddTagsToArticle(data.names, data.title , Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
 
-        [HttpDelete("/tags/delete"), Authorize]
-        public async Task<IActionResult> DeleteArticleTags(TagsManipulationData data)
+        [HttpPost("/:slug/comments"), Authorize]
+        public async Task<IActionResult> AddArticleComment([FromBody]AddCommentEnvelop data, string slug)
         {
-            return Ok(await _deleteTags.DeleteTagsFromArticle(data.names, data.title, Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            return Ok(await _addComment.AddCommentoArticle(data.comment, slug, Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+        }
+
+        [HttpGet("/:slug/comments"), AllowAnonymous]
+        public async Task<IActionResult> GetArticleComments(string slug)
+        {
+            return Ok(await _getComment.GetComments(slug));
         }
     }
 }
